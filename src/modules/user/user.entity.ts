@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+
+import { ApiKey } from '../apiKey/api-key.entity';
 
 @Entity()
 export class User {
@@ -16,4 +18,7 @@ export class User {
 
   @Column({ nullable: true })
   refreshToken?: string;
+
+  @OneToMany(() => ApiKey, (apiKey) => apiKey.user)
+  apiKeys: ApiKey[];
 }

@@ -51,8 +51,10 @@ export class UserController {
     }
 
     const payload = { username: user.email, sub: user.id };
-    const accessToken = this.jwtService.sign(payload);
-    const refreshToken = this.jwtService.sign(payload, { expiresIn: '14d' });
+    const accessToken = await this.jwtService.signAsync(payload);
+    const refreshToken = await this.jwtService.signAsync(payload, {
+      expiresIn: '14d',
+    });
 
     user.refreshToken = refreshToken;
     await this.userService.saveUser(user);

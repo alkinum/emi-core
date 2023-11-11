@@ -4,10 +4,10 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
 
+import { ApiKeyModule } from './modules/apiKey/api-key.module';
 import { HttpExceptionFilter } from './modules/global/httpExceptionFilter';
 import { TransformInterceptor } from './modules/global/transformInterceptor';
 import { HealthModule } from './modules/health/health.module';
-import { User } from './modules/user/user.entity';
 import { UserModule } from './modules/user/user.module';
 
 dotenv.config();
@@ -22,7 +22,6 @@ dotenv.config();
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [User],
       synchronize: true, // 生产环境中应设置为false
     }),
     JwtModule.register({
@@ -30,6 +29,7 @@ dotenv.config();
       signOptions: { expiresIn: '60m' }, // 设置 token 过期时间
     }),
     // business
+    ApiKeyModule,
     HealthModule,
     UserModule,
   ],

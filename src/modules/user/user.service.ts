@@ -57,8 +57,8 @@ export class UserService {
     // 验证 refreshToken 是否有效（这里需要实现 JWT 验证逻辑）
     // 如果有效，生成新的 accessToken
     const newPayload = { email: user.email, sub: user.id };
-    const newAccessToken = this.jwtService.sign(newPayload);
-    const newRefreshToken = this.jwtService.sign(newPayload, {
+    const newAccessToken = await this.jwtService.signAsync(newPayload);
+    const newRefreshToken = await this.jwtService.signAsync(newPayload, {
       expiresIn: '14d',
     });
 
