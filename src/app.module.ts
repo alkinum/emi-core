@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
 
 import { ApiKeyModule } from './modules/api-key/api-key.module';
+import { ChatModule } from './modules/chat/chat.module';
 import { HttpExceptionFilter } from './modules/global/httpExceptionFilter';
 import { TransformInterceptor } from './modules/global/transformInterceptor';
 import { HealthModule } from './modules/health/health.module';
@@ -23,7 +24,7 @@ dotenv.config();
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      synchronize: true, // 生产环境中应设置为false
+      synchronize: process.env.NODE_ENV !== 'production', // 生产环境中应设置为false
     }),
     JwtModule.register({
       secret: process.env.JWT_SECRET, // 从环境变量中获取秘钥
@@ -31,6 +32,7 @@ dotenv.config();
     }),
     // business
     ApiKeyModule,
+    ChatModule,
     HealthModule,
     UserModule,
     UserProfileModule,

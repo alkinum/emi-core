@@ -1,15 +1,18 @@
 version: '3.8'
 
 services:
-  nestjs-app:
+  emi-core:
     build: .
     depends_on:
       - db
     environment:
       - DATABASE_HOST=db
-      - DATABASE_USER=emiuser # 根据实际情况修改用户名
-      - DATABASE_PASSWORD=emi
-      - DATABASE_NAME=test
+      - DATABASE_USER= # 根据实际情况填写
+      - DATABASE_PASSWORD=
+      - DATABASE_NAME=
+      - SESSION_SECRET=
+      - JWT_SECRET=
+      - NODE_ENV=
     healthcheck:
       test: ['CMD', 'curl', '-f', 'http://localhost:3000/health']
       interval: 30s
@@ -51,7 +54,7 @@ services:
     ports:
       - '443:443'
     depends_on:
-      - nestjs-app
+      - emi-core
     networks:
       - default
 
