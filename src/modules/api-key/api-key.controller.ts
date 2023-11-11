@@ -6,6 +6,7 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
+import { ApiExcludeEndpoint } from '@nestjs/swagger';
 
 import { UserJwtPayload } from '../auth/jwt.strategy';
 
@@ -19,8 +20,9 @@ import { JwtAuthGuard } from '@/modules/auth/jwt.guard';
 export class ApiKeyController {
   constructor(private apiKeyService: ApiKeyService) {}
 
-  @Post()
+  @Post('create')
   @UseGuards(JwtAuthGuard)
+  @ApiExcludeEndpoint()
   async create(@Request() req): Promise<ApiKey> {
     const userPayload = req.user as UserJwtPayload;
     return this.apiKeyService.createApiKey(userPayload.sub);
@@ -28,6 +30,7 @@ export class ApiKeyController {
 
   @Get('list')
   @UseGuards(JwtAuthGuard)
+  @ApiExcludeEndpoint()
   async list(@Request() req): Promise<ApiKey[]> {
     const userPayload = req.user as UserJwtPayload;
     return this.apiKeyService.listApiKeys(userPayload.sub);
@@ -35,6 +38,7 @@ export class ApiKeyController {
 
   @Post('revoke')
   @UseGuards(JwtAuthGuard)
+  @ApiExcludeEndpoint()
   async revoke(
     @Request() req,
     @Body() revokeApiKeyDto: RevokeApiKeyDto,

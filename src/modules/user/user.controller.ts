@@ -7,6 +7,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { ApiExcludeEndpoint } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '../auth/jwt.guard';
 import { TurnstileGuard } from '../turnstile/turnstile.guard';
@@ -26,6 +27,7 @@ export class UserController {
 
   @Post('register')
   @UseGuards(TurnstileGuard)
+  @ApiExcludeEndpoint()
   async register(
     @Body(ValidationPipe) createUserDto: CreateUserDto,
   ): Promise<User> {
@@ -40,6 +42,7 @@ export class UserController {
 
   @Post('login')
   @UseGuards(TurnstileGuard)
+  @ApiExcludeEndpoint()
   async login(@Body() loginUserDto: LoginUserDto): Promise<any> {
     const user = await this.userService.validateUser(
       loginUserDto.email,
@@ -67,6 +70,7 @@ export class UserController {
 
   @Post('refresh-token')
   @UseGuards(JwtAuthGuard)
+  @ApiExcludeEndpoint()
   async refreshToken(@Body() refreshTokenDto: RefreshTokenDto): Promise<any> {
     const { refreshToken } = refreshTokenDto;
     const newTokens = await this.userService.refreshToken(refreshToken);

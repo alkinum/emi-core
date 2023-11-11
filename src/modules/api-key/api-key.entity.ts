@@ -7,7 +7,7 @@ export class ApiKey {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ unique: true })
+  @Column({ unique: true, length: 45 })
   key: string;
 
   @Column()

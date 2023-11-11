@@ -20,7 +20,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const message = exception.message || '内部服务器错误';
 
     response.status(status).send({
-      code: exception.code || status, // 使用自定义错误码，如果没有则使用HTTP状态码
+      code: exception.code || status,
       msg: message,
       data: null,
     });

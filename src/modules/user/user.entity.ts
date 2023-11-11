@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
-import { ApiKey } from '../apiKey/api-key.entity';
+import { ApiKey } from '../api-key/api-key.entity';
 
 @Entity()
 export class User {

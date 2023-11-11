@@ -4,11 +4,12 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
 
-import { ApiKeyModule } from './modules/apiKey/api-key.module';
+import { ApiKeyModule } from './modules/api-key/api-key.module';
 import { HttpExceptionFilter } from './modules/global/httpExceptionFilter';
 import { TransformInterceptor } from './modules/global/transformInterceptor';
 import { HealthModule } from './modules/health/health.module';
 import { UserModule } from './modules/user/user.module';
+import { UserProfileModule } from './modules/user-profile/user-profile.module';
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ dotenv.config();
     ApiKeyModule,
     HealthModule,
     UserModule,
+    UserProfileModule,
   ],
   providers: [
     {

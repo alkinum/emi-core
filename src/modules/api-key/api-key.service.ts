@@ -9,6 +9,8 @@ import { UserService } from '../user/user.service';
 
 import { ApiKey } from './api-key.entity';
 
+import { User } from '@/modules/user/user.entity';
+
 @Injectable()
 export class ApiKeyService {
   private readonly nanoid = customAlphabet(
@@ -66,6 +68,30 @@ export class ApiKeyService {
     }
 
     await this.apiKeyRepository.remove(apiKey);
-    await this.cacheManager.del(key);
+    await Promise.all([
+      this.cacheManager.del(key),
+      this.cacheManager.del(`api-key-user:${key}`),
+    ]);
+  }
+
+  async validateApiKeyAndGetUser(apiKey: string): Promise<User | null> {
+    const cacheKey = `api-key-user:${apiKey}`;
+    const cachedUser = await this.cacheManager.get<User>(cacheKey);
+
+    if (cachedUser) {
+      return cachedUser;
+    }
+
+    const apiKeyEntity = await this.apiKeyRepository.findOne({
+      where: { key: apiKey },
+      relations: ['user'],
+    });
+
+    if (apiKeyEntity && apiKeyEntity.user) {
+      await this.cacheManager.set(cacheKey, apiKeyEntity.user, 300);
+      return apiKeyEntity.user;
+    }
+
+    return null;
   }
 }

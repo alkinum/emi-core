@@ -4,15 +4,22 @@ import {
   ExecutionContext,
   UnauthorizedException,
 } from '@nestjs/common';
+import { FastifyRequest } from 'fastify';
 
 import { ApiKeyService } from './api-key.service';
+
+import { User } from '@/modules/user/user.entity';
+
+export interface ApiUserRequest extends FastifyRequest {
+  user?: User;
+}
 
 @Injectable()
 export class ApiKeyGuard implements CanActivate {
   constructor(private apiKeyService: ApiKeyService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest<ApiUserRequest>();
     const authHeader = request.headers.authorization;
 
     if (!authHeader) {
@@ -21,19 +28,17 @@ export class ApiKeyGuard implements CanActivate {
 
     const [bearer, apiKey] = authHeader.split(' ');
 
-    if (bearer !== 'Bearer' || !apiKey) {
+    if (bearer !== 'Bearer' || !apiKey || !apiKey.startsWith('ek-')) {
       throw new UnauthorizedException('无效的 API 密钥格式');
     }
 
-    const isValid = await this.validateApiKey(apiKey);
-    if (!isValid) {
+    const user = await this.apiKeyService.validateApiKeyAndGetUser(apiKey);
+    if (!user) {
       throw new UnauthorizedException('无效的 API 密钥');
     }
 
-    return true;
-  }
+    request.user = user;
 
-  private async validateApiKey(apiKey: string): Promise<boolean> {
-    return await this.apiKeyService.keyExists(apiKey);
+    return true;
   }
 }
