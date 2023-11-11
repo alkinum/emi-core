@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  nestjs-app:
+    build: .
+    depends_on:
+      - db
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_USER=emiuser # 根据实际情况修改用户名
+      - DATABASE_PASSWORD=emi
+      - DATABASE_NAME=test
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3000/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - default
+
+  db:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: emi
+      MYSQL_USER: emiuser # 这里设置数据库用户名
+      MYSQL_PASSWORD: emipassword # 这里设置数据库用户密码
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+    volumes:
+      - db-data:/var/lib/mysql
+
+  letsencrypt:
+    image: linuxserver/letsencrypt
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - URL=yourdomain.com # 根据实际情况修改
+      - VALIDATION=http
+    volumes:
+      - /path/to/appdata/config:/config
+    ports:
+      - '443:443'
+    depends_on:
+      - nestjs-app
+    networks:
+      - default
+
+networks:
+  default:
+    driver: bridge
+
+volumes:
+  db-data:
