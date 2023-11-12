@@ -10,15 +10,15 @@ import { UserProfile } from '@/modules/user-profile/user-profile.entity';
 import { UserProfileService } from '@/modules/user-profile/user-profile.service';
 import { getFormattedTime } from '@/utils/date';
 
-@ApiTags('Chat')
-@Controller('chat')
-export class ChatController {
+@ApiTags('Environment')
+@Controller('env')
+export class EnvController {
   constructor(private userProfileService: UserProfileService) {}
 
   @Get('init')
   @UseGuards(ApiKeyGuard)
   @ApiOperation({
-    summary: 'Get necessary initial chat information.',
+    summary: 'Get necessary initial information of chat environment.',
     description: 'Returns the user profile and current time in GMT+0.',
   })
   @ApiResponse({

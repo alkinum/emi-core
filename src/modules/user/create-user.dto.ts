@@ -1,11 +1,11 @@
 import { IsString, IsEmail, Length } from 'class-validator';
 
-import { IsSameAs } from '@/decorators/is-same-as';
+// import { IsSameAs } from '@/decorators/is-same-as';
 
 export class CreateUserDto {
-  @IsString()
-  @Length(2, 20)
-  nickname: string;
+  @IsEmail()
+  @Length(5, 100)
+  email: string;
 
   @IsString()
   @Length(64)
@@ -13,10 +13,9 @@ export class CreateUserDto {
 
   @IsString()
   @Length(64)
-  @IsSameAs('password', { message: 'Passwords are not same.' })
+  // @IsSameAs('password', { message: 'Passwords are not same.' })
   confirmPassword: string;
 
-  @IsEmail()
-  @Length(5, 100)
-  email: string;
+  @IsString()
+  t_token: string;
 }

@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
 
 import { ApiKeyModule } from './modules/api-key/api-key.module';
-import { ChatModule } from './modules/chat/chat.module';
+import { EnvModule } from './modules/environment/env.module';
 import { HttpExceptionFilter } from './modules/global/httpExceptionFilter';
 import { TransformInterceptor } from './modules/global/transformInterceptor';
 import { HealthModule } from './modules/health/health.module';
@@ -32,7 +32,7 @@ dotenv.config();
     }),
     // business
     ApiKeyModule,
-    ChatModule,
+    EnvModule,
     HealthModule,
     UserModule,
     UserProfileModule,

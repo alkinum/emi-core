@@ -1,5 +1,5 @@
-import * as cookie from '@fastify/cookie';
-import * as session from '@fastify/session';
+import cookie from '@fastify/cookie';
+import session from '@fastify/session';
 import { NestFactory } from '@nestjs/core';
 import {
   FastifyAdapter,
@@ -22,6 +22,11 @@ async function bootstrap() {
     cookie: {
       secure: process.env.NODE_ENV === 'production', // 如果是生产环境，则开启安全cookie
     },
+  });
+
+  app.enableCors({
+    origin: ['https://emi.alkinum.io'],
+    methods: 'GET,POST',
   });
 
   const config = new DocumentBuilder()

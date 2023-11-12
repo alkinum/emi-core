@@ -6,4 +6,7 @@ export class LoginUserDto {
 
   @IsString()
   password: string;
+
+  @IsString()
+  t_token: string;
 }

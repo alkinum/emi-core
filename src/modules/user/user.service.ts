@@ -30,6 +30,13 @@ export class UserService {
     return this.usersRepository.findOne({ where: { id } });
   }
 
+  async isEmailRegistered(email: string): Promise<boolean> {
+    const existingUser = await this.usersRepository.findOne({
+      where: { email },
+    });
+    return !!existingUser;
+  }
+
   async validateUser(
     email: string,
     password: string,

@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "description": "Core service for Emi on GPTs",
   "author": "BackRunner",
-  "private": true,
   "license": "Apache-2.0",
   "scripts": {
     "dev": "npm run start:dev",
@@ -17,6 +16,7 @@
   },
   "dependencies": {
     "@fastify/cookie": "^9.1.0",
+    "@fastify/cors": "^8.4.1",
     "@fastify/session": "^10.5.0",
     "@fastify/static": "^6.12.0",
     "@nestjs/axios": "^3.0.1",
@@ -30,6 +30,7 @@
     "@nestjs/terminus": "^10.1.1",
     "@nestjs/typeorm": "^10.0.0",
     "cache-manager": "^5.2.4",
+    "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "dayjs": "^1.11.10",
     "dotenv": "^16.3.1",

@@ -5,6 +5,7 @@ import {
   ValidationPipe,
   UseGuards,
   UnauthorizedException,
+  ConflictException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ApiExcludeEndpoint } from '@nestjs/swagger';
@@ -31,9 +32,12 @@ export class UserController {
   async register(
     @Body(ValidationPipe) createUserDto: CreateUserDto,
   ): Promise<User> {
+    if (!(await this.userService.isEmailRegistered(createUserDto.email))) {
+      throw new ConflictException('该邮箱已被注册');
+    }
+
     const user = new User();
 
-    user.nickname = createUserDto.nickname;
     user.password = createUserDto.password;
     user.email = createUserDto.email;
 

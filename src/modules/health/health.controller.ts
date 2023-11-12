@@ -18,7 +18,7 @@ export class HealthController {
   @ApiExcludeEndpoint()
   check() {
     return this.health.check([
-      () => this.http.pingCheck('google', 'https://google.com'),
+      () => this.http.pingCheck('baidu', 'https://baidu.com'),
     ]);
   }
 }
