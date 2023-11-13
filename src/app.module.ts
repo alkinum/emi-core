@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
-import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
 
@@ -25,10 +24,7 @@ dotenv.config();
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
       synchronize: process.env.NODE_ENV !== 'production', // 生产环境中应设置为false
-    }),
-    JwtModule.register({
-      secret: process.env.JWT_SECRET, // 从环境变量中获取秘钥
-      signOptions: { expiresIn: '60m' }, // 设置 token 过期时间
+      autoLoadEntities: true,
     }),
     // business
     ApiKeyModule,

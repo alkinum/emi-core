@@ -4,6 +4,7 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
 
@@ -18,6 +19,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
         ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
     const message = exception.message || '内部服务器错误';
+
+    if (status === HttpStatus.INTERNAL_SERVER_ERROR) {
+      Logger.error(exception);
+    }
 
     response.status(status).send({
       code: exception.code || status,

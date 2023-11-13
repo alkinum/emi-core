@@ -1,7 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+
+import { UserJwtPayload } from '../auth/jwt.strategy';
 
 import { User } from './user.entity';
 
@@ -52,13 +54,32 @@ export class UserService {
     return await this.usersRepository.save(user);
   }
 
-  async refreshToken(refreshToken: string): Promise<UserTokens | null> {
+  async refreshToken(
+    accessToken: string,
+    refreshToken: string,
+  ): Promise<UserTokens | null> {
+    let res: UserJwtPayload | undefined;
+    try {
+      res = await this.jwtService.verifyAsync<UserJwtPayload>(accessToken, {
+        ignoreExpiration: true,
+      });
+    } catch (error) {
+      throw new UnauthorizedException('无效的令牌');
+    }
+    if (!res?.sub) {
+      throw new UnauthorizedException('无效的令牌');
+    }
+
     const user = await this.usersRepository.findOne({
-      where: { refreshToken },
+      where: { id: res.sub },
     });
 
     if (!user) {
-      return null;
+      throw new UnauthorizedException('无效的令牌');
+    }
+
+    if (user.refreshToken !== refreshToken) {
+      throw new Error('无效的刷新令牌');
     }
 
     // 验证 refreshToken 是否有效（这里需要实现 JWT 验证逻辑）
@@ -68,6 +89,9 @@ export class UserService {
     const newRefreshToken = await this.jwtService.signAsync(newPayload, {
       expiresIn: '14d',
     });
+
+    user.refreshToken = newRefreshToken;
+    await this.usersRepository.save(user);
 
     return {
       accessToken: newAccessToken,
