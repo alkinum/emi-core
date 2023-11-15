@@ -2,6 +2,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { JwtAuthModule } from '../auth/jwt.module';
 import { UserModule } from '../user/user.module';
 
 import { ApiKeyController } from './api-key.controller';
@@ -13,6 +14,7 @@ import { ApiKeyService } from './api-key.service';
     TypeOrmModule.forFeature([ApiKey]),
     CacheModule.register(),
     UserModule,
+    JwtAuthModule,
   ],
   providers: [ApiKeyService],
   controllers: [ApiKeyController],

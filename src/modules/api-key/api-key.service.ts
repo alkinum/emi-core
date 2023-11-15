@@ -26,7 +26,12 @@ export class ApiKeyService {
   ) {}
 
   async listApiKeys(userId: string): Promise<ApiKey[]> {
-    return this.apiKeyRepository.find({ where: { user: { id: userId } } });
+    return this.apiKeyRepository.find({
+      where: { user: { id: userId } },
+      order: {
+        createdAt: 'DESC',
+      },
+    });
   }
 
   generateApiKey(): string {
