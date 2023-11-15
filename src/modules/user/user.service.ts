@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -28,8 +32,19 @@ export class UserService {
     return this.usersRepository.save(user);
   }
 
-  async getUserById(id: string): Promise<User | undefined> {
+  async getUserById(id: string): Promise<User> {
     return this.usersRepository.findOne({ where: { id } });
+  }
+
+  async getUserInfoById(id: string): Promise<Partial<User>> {
+    const user = await this.usersRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new BadRequestException('无法找到对应的用户信息');
+    }
+    return {
+      email: user.email,
+      nickname: user.nickname,
+    };
   }
 
   async isEmailRegistered(email: string): Promise<boolean> {

@@ -6,10 +6,14 @@ import {
   UseGuards,
   UnauthorizedException,
   ConflictException,
+  Get,
+  Request,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ApiExcludeEndpoint } from '@nestjs/swagger';
 
+import { JwtAuthGuard } from '../auth/jwt.guard';
+import { UserJwtPayload } from '../auth/jwt.strategy';
 import { TurnstileGuard } from '../turnstile/turnstile.guard';
 
 import { CreateUserDto } from './create-user.dto';
@@ -24,6 +28,14 @@ export class UserController {
     private userService: UserService,
     private jwtService: JwtService,
   ) {}
+
+  @Get('info')
+  @UseGuards(JwtAuthGuard)
+  @ApiExcludeEndpoint()
+  async getUserInfo(@Request() req): Promise<Partial<User>> {
+    const userPayload = req.user as UserJwtPayload;
+    return this.userService.getUserInfoById(userPayload.sub);
+  }
 
   @Post('register')
   @UseGuards(TurnstileGuard)

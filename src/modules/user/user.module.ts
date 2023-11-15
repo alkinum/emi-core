@@ -4,6 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
 
+import { JwtAuthModule } from '../auth/jwt.module';
 import { TurnstileService } from '../turnstile/turnstile.service';
 
 import { UserController } from './user.controller';
@@ -20,6 +21,7 @@ dotenv.config();
       signOptions: { expiresIn: '7d' },
     }),
     HttpModule,
+    JwtAuthModule,
   ],
   controllers: [UserController],
   providers: [UserService, TurnstileService],
