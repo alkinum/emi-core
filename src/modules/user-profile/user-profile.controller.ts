@@ -1,7 +1,7 @@
 import { Controller, Get, Body, UseGuards, Req, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-import { ApiKeyGuard, ApiUserRequest } from '../api-key/api-key.guard';
+import { ApiKeyGuard, ApiUserRequest } from '../auth/api-key.guard';
 
 import { UserProfileDto } from './update-profile.dto';
 import { UserProfileService } from './user-profile.service';

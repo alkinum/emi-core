@@ -3,7 +3,7 @@
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-import { ApiKeyGuard, ApiUserRequest } from '../api-key/api-key.guard';
+import { ApiKeyGuard, ApiUserRequest } from '../auth/api-key.guard';
 import { Response } from '../global/response';
 
 import { UserProfile } from '@/modules/user-profile/user-profile.entity';
